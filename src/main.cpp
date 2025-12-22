@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <limits>
 
 using namespace std;
 
@@ -24,6 +25,13 @@ void ensureUsersFile()
     }
     else
         fin.close();
+}
+
+void PauseScreen()
+{
+    cout << "\n Press Enter to continue...\n";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.get();
 }
 
 int main()
