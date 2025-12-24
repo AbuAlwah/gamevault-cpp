@@ -6,7 +6,6 @@
 #include <conio.h>
 #include "User.h"
 
-
 using namespace std;
 
 void ClearScreen()
@@ -173,6 +172,69 @@ User login()
     current.role = "none";
     return current;
 }
+
+template <typename T>
+class Stack
+{
+private:
+    T *arr;
+    int capacity;
+    int topIndex;
+    void resize(int newCap)
+    {
+        T *newArr = new T[newCap];
+        for (int i = 0; i <= topIndex; i++)
+            newArr[i] = arr[i];
+        delete[] arr;
+        arr = newArr;
+        capacity = newCap;
+    }
+
+public:
+    Stack()
+    {
+        capacity = 4;
+        arr = new T[capacity];
+        topIndex = -1;
+    }
+    ~Stack()
+    {
+        delete[] arr;
+    }
+    void push(const T &val)
+    {
+        if (topIndex + 1 >= capacity)
+            resize(capacity * 2);
+        arr[++topIndex] = val;
+    }
+    T pop()
+    {
+        if (isEmpty())
+        {
+            throw runtime_error("Stack is empty");
+        }
+
+        T val = arr[topIndex--];
+        if (topIndex + 1 <= capacity / 4 && capacity > 4)
+            resize(capacity / 2);
+        return val;
+    }
+    T top() const
+    {
+        if (isEmpty())
+            throw runtime_error("Stack is empty");
+
+        return arr[topIndex];
+    }
+    bool isEmpty() const
+    {
+        return topIndex == -1;
+    }
+    int size() const
+    {
+        return topIndex + 1;
+    }
+};
 
 int main()
 {
