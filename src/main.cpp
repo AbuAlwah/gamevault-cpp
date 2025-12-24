@@ -4,6 +4,8 @@
 #include <limits>
 #include <windows.h>
 #include <conio.h>
+#include "User.h"
+
 
 using namespace std;
 
@@ -80,6 +82,51 @@ string inputPasswordMasked()
     return password;
 }
 
+bool parseLineUser(const string &line, User &u)
+{
+    int pos1 = line.find('|');
+    if (pos1 == string::npos)
+        return false;
+    int pos2 = line.find('|', pos1 + 1);
+    if (pos2 == string::npos)
+        return false;
+
+    u.username = line.substr(0, pos1);
+    u.password = line.substr(pos1 + 1, pos2 - pos1 - 1);
+    u.role = line.substr(pos2 + 1);
+    return true;
+}
+
+bool loginuserstxt(const string &inputUser, const string &inputPass, User &loggedUser)
+{
+    ensureUsersFile();
+
+    ifstream fin("users.txt");
+    if (!fin)
+    {
+        cout << "File users.txt not found!\n";
+        return false;
+    }
+
+    string line;
+    while (getline(fin, line))
+    {
+        if (!line.empty() && line.back() == '\r')
+            line.pop_back();
+        User temp;
+        if (!parseLineUser(line, temp))
+            continue;
+        if (inputUser == temp.username && inputPass == temp.password)
+        {
+            loggedUser = temp;
+            fin.close();
+            return true;
+        }
+    }
+
+    fin.close();
+    return false;
+}
 int main()
 {
 
