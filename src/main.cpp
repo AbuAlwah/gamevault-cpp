@@ -258,6 +258,43 @@ void InitNextId(vector<Game> &Games)
     }
 }
 
+void ShowGames(const vector<Game> &Games)
+{
+    cout << endl
+         << left << setw(9) << "ID" << setw(22) << "Name" << setw(13) << "Price" << setw(12) << "Quantity" << endl;
+
+    cout << "------------------------------------------------------\n";
+
+    for (auto &g : Games)
+    {
+        cout << setw(6) << g.ID << setw(25) << g.Name << setw(16) << g.Price << setw(10) << g.Quantity << endl;
+    }
+    cout << "------------------------------------------------------\n";
+}
+
+void saveGamesToFile(const vector<Game> &Games, const string &filename = "games.txt")
+{
+    ofstream fout(filename);
+    if (!fout)
+    {
+        cout << "Unable to open " << filename << " for writing.\n";
+        return;
+    }
+
+    fout << endl
+         << left << setw(9) << "ID" << setw(22) << "Name" << setw(13) << "Price" << setw(12) << "Quantity" << endl;
+
+    fout << "----------------------------------------------------------------\n";
+
+    for (auto &g : Games)
+    {
+        fout << setw(6) << g.ID << setw(25) << g.Name << setw(16) << g.Price << setw(10) << g.Quantity << endl;
+    }
+    fout << "----------------------------------------------------------------\n";
+
+    fout.close();
+}
+
 int main()
 {
 
