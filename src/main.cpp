@@ -373,8 +373,56 @@ double parsePrice(const string &priceStr)
     }
 }
 
+void AddGame(vector<Game> &Games, Stack<Game> &addedStack)
+{
+    Game NewGame;
+    NewGame.ID = ++NextId;
+    cout << "Added game name: ";
+    getline(cin >> ws, NewGame.Name);
+
+    cout << "Game price: ";
+    getline(cin >> ws, NewGame.Price);
+
+    cout << "Available quantity: ";
+    cin >> NewGame.Quantity;
+
+    Games.push_back(NewGame);
+
+    addedStack.push(NewGame);
+
+    saveGamesToFile(Games);
+
+    cout << "\nGame added successfully.\n";
+}
+
+bool UndoAdd(vector<Game> &Games, Stack<Game> &addedStack)
+{
+    if (addedStack.isEmpty())
+    {
+        cout << "Nothing to undo .\n";
+        return false;
+    }
+    Game g = addedStack.pop();
+    for (int i = Games.size() - 1; i >= 0; i--)
+    {
+        if (Games[i].ID == g.ID)
+        {
+            Games.erase(Games.begin() + i);
+            saveGamesToFile(Games);
+            cout << "Undo successful. Added game removed: " << g.Name << " (ID" << g.ID << ")" << endl;
+            return true;
+        }
+    }
+    return false;
+}
+
 int main()
 {
+    vector<Game> Games;
+    InitNextId(Games);
+    loadGamesFromFile(Games);
+
+    Stack<Game> addedStack;
 
     ClearScreen();
 
