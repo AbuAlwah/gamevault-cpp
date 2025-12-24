@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream>
 #include <limits>
+#include <windows.h>
+#include <conio.h>
 
 using namespace std;
 
@@ -32,6 +34,50 @@ void PauseScreen()
     cout << "\n Press Enter to continue...\n";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cin.get();
+}
+
+string inputPasswordMasked()
+{
+    const int max_length = 15;
+    string password = "";
+    char ch;
+    while (true)
+    {
+        ch = getch();
+        if (ch == 13)
+        {
+            cout << endl;
+            break;
+        }
+        else if (ch == 8)
+        {
+            if (!password.empty())
+            {
+                password.erase(password.size() - 1);
+                cout << "\b \b";
+            }
+        }
+        else if (ch == 0 || ch == -32)
+        {
+            getch();
+            continue;
+        }
+        else
+        {
+            if (password.size() < max_length)
+
+            {
+                password.push_back(ch);
+                cout << '*';
+            }
+
+            else
+            {
+                MessageBeep(MB_ICONEXCLAMATION);
+            }
+        }
+    }
+    return password;
 }
 
 int main()
