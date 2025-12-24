@@ -4,6 +4,7 @@
 #include <limits>
 #include <windows.h>
 #include <conio.h>
+#include <iomanip>
 #include "User.h"
 #include "Game.h"
 
@@ -293,6 +294,83 @@ void saveGamesToFile(const vector<Game> &Games, const string &filename = "games.
     fout << "----------------------------------------------------------------\n";
 
     fout.close();
+}
+
+void loadGamesFromFile(vector<Game> &Games, const string &filename = "games.txt")
+{
+    Games.clear();
+    ifstream fin(filename);
+    if (!fin)
+    {
+        InitGames(Games);
+        InitNextId(Games);
+        saveGamesToFile(Games, filename);
+        return;
+    }
+
+    string line;
+    while (getline(fin, line))
+    {
+        if (!line.empty() && line.back() == '\r')
+            line.pop_back();
+
+        if (line.empty())
+            continue;
+        if (line.find("ID") != string::npos)
+            continue;
+        if (line.find("----") != string::npos)
+            continue;
+
+        stringstream ss(line);
+        Game g;
+        ss >> g.ID >> ws;
+
+        g.Name.clear();
+        g.Price.clear();
+
+        string token;
+        while (ss >> token)
+        {
+
+            if (token.find('$') != string::npos)
+            {
+                g.Price = token;
+                break;
+            }
+
+            if (!g.Name.empty())
+                g.Name += " ";
+            g.Name += token;
+        }
+
+        ss >> g.Quantity;
+
+        if (!g.Name.empty() || !g.Price.empty())
+            Games.push_back(g);
+    }
+
+    fin.close();
+    InitNextId(Games);
+}
+
+double parsePrice(const string &priceStr)
+{
+    string num = "";
+    for (auto c : priceStr)
+    {
+        if ((c >= '0' && c <= '9') || c == '.')
+            num.push_back(c);
+    }
+    if (num.empty())
+        return 0.0;
+    try
+    {
+        return stod(num);
+    }
+    catch (...)
+    {
+        return 0.0;
+    }
 }
 
 int main()
