@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <conio.h>
 #include "User.h"
+#include "Game.h"
 
 using namespace std;
 
@@ -235,6 +236,27 @@ public:
         return topIndex + 1;
     }
 };
+
+int NextId = 0;
+
+void InitGames(vector<Game> &Games)
+{
+    Game s1{1110, "Spider-Man 2", "49.99$", 13};
+    Game s2{1111, "Frontiers Of Pandora", "35.99$", 10};
+    Game s3{1112, "The Dark Ages", "85.99$", 7};
+    Game s4{1113, "Cyberpunk 2077", "23.99$", 18};
+    Games = {s1, s2, s3, s4};
+}
+
+void InitNextId(vector<Game> &Games)
+{
+    NextId = 0;
+    for (auto &g : Games)
+    {
+        if (g.ID > NextId)
+            NextId = g.ID;
+    }
+}
 
 int main()
 {
