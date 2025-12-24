@@ -127,6 +127,53 @@ bool loginuserstxt(const string &inputUser, const string &inputPass, User &logge
     fin.close();
     return false;
 }
+
+User login()
+{
+    const int MaxAttemps = 3;
+    int Attempts = 0;
+    User current;
+
+    while (Attempts < MaxAttemps)
+    {
+        string username;
+        cout << "Enter username: ";
+        getline(cin >> ws, username);
+        cout << "Enter password: ";
+        string password = inputPasswordMasked();
+
+        if (loginuserstxt(username, password, current))
+        {
+            cout << "Login successful! Role: " << current.role << endl;
+            return current;
+        }
+        else
+        {
+            Attempts++;
+            cout << "\n\t\t\t\t\tErrore in username or password !\n";
+            cout << "\t\tAttempt No." << Attempts << " Of " << MaxAttemps << endl;
+
+            if (Attempts < MaxAttemps)
+            {
+                cout << "\n Press Enter to try again...";
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.get();
+                ClearScreen();
+            }
+            else
+            {
+                ClearScreen();
+                cout << "\n\tThe password limit has been exceeded !\n\n";
+                cout << "\t\t\t\t\t The program is closing...\n\n";
+
+                exit(0);
+            }
+        }
+    }
+    current.role = "none";
+    return current;
+}
+
 int main()
 {
 
