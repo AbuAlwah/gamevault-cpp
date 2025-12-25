@@ -449,6 +449,56 @@ void EditGame(vector<Game> &Games)
         cout << "\n\t\t\tGame not found !\n\n";
 }
 
+void SearchGameByID(const vector<Game> &Games)
+{
+    int id;
+    cout << "Enter Game ID : ";
+    cin >> id;
+    ClearScreen();
+
+    bool Found = false;
+    for (auto &g : Games)
+    {
+        if (g.ID == id)
+        {
+            Found = true;
+            cout << "\n\t\tThe game has been found .\n\n";
+            cout << "Name : " << g.Name << endl;
+            cout << "Price : " << g.Price << endl;
+            cout << "Quantity : " << g.Quantity << endl
+                 << endl;
+            return;
+        }
+    }
+    if (!Found)
+        cout << "\n\t\t\tGame not found !\n\n";
+}
+
+void SearchGameName(const vector<Game> &Games)
+{
+    string name;
+    cout << "Enter Game's name to search : ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, name);
+
+    bool Found = false;
+    for (auto &g : Games)
+    {
+        if (g.Name == name)
+        {
+            Found = true;
+            cout << "\n\t\tThe game has been found .\n\n";
+            cout << "Name : " << g.Name << endl;
+            cout << "Price : " << g.Price << endl;
+            cout << "Quantity : " << g.Quantity << endl
+                 << endl;
+            return;
+        }
+    }
+    if (!Found)
+        cout << "\n\t\t\tGame not found !\n\n";
+}
+
 int main()
 {
     vector<Game> Games;
