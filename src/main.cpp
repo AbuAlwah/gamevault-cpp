@@ -499,6 +499,57 @@ void SearchGameName(const vector<Game> &Games)
         cout << "\n\t\t\tGame not found !\n\n";
 }
 
+bool DeleteGameByID(vector<Game> &Games, Stack<Game> &deletedStack)
+{
+    int id;
+    cout << "Enter ID to delete : ";
+    cin >> id;
+    cout << endl;
+    int index = -1;
+    for (size_t i = 0; i < Games.size(); i++)
+    {
+        if (Games[i].ID == id)
+        {
+            index = (int)i;
+
+            cout << "Name : " << Games[i].Name << endl;
+            cout << "Price : " << Games[i].Price << endl;
+            cout << "Quantity : " << Games[i].Quantity << endl
+                 << endl;
+            break;
+        }
+    }
+    if (index == -1)
+    {
+        cout << "\nGame with ID " << id << " not found.\n";
+        return false;
+    }
+
+    deletedStack.push(Games[index]);
+
+    Games.erase(Games.begin() + index);
+    saveGamesToFile(Games);
+    cout << "\nGame deleted and pushed to undo stack.\n";
+    return true;
+}
+
+bool UndoDeletion(vector<Game> &Games, Stack<Game> &deletedStack)
+{
+    if (deletedStack.isEmpty())
+    {
+        cout << "Nothing to undo.\n";
+        return false;
+    }
+    Game g = deletedStack.pop();
+    Games.push_back(g);
+
+    if (g.ID > NextId)
+        NextId = g.ID;
+    saveGamesToFile(Games);
+    cout << "Undo successful. Game restored: " << g.Name << " (ID " << g.ID << ")\n";
+    return true;
+}
+
 int main()
 {
     vector<Game> Games;
@@ -506,6 +557,7 @@ int main()
     loadGamesFromFile(Games);
 
     Stack<Game> addedStack;
+    Stack<Game> deletedStack;
 
     ClearScreen();
 
