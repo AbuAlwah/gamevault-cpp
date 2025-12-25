@@ -592,6 +592,89 @@ void ShowReport(const vector<Game> &Games)
     cout << "\nReport saved to report.txt\n";
 }
 
+void BuyGame(vector<Game> &Games, const string &username)
+{
+    string name;
+    cout << "Enter game name to buy : ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin >> ws, name);
+
+    bool Found = false;
+    for (auto &g : Games)
+    {
+        if (g.Name == name)
+        {
+            Found = true;
+
+            cout << "\n\t\tThe game has been found .\n\n";
+            cout << "Name : " << g.Name << endl;
+            cout << "Price : " << g.Price << endl;
+            cout << "Available Quantity : " << g.Quantity << endl
+                 << endl;
+
+            int amount;
+            cout << "\t\tEnter quantity to buy : ";
+            cin >> amount;
+
+            if (amount <= 0)
+            {
+                cout << "\n\t\tInvalid quantity." << endl;
+                return;
+            }
+
+            if (amount > g.Quantity)
+            {
+                cout << "\n\t\tSorry , Only " << g.Quantity << " copies available." << endl;
+                return;
+            }
+
+            string confirm;
+            cout << "\n\t\t\t\t\t\t\tConfirm purchase ? \n\n\t\t\t\t\t\t\t   yes \t  no \n\n\t\t\t\t\t\t\t Your choice : ";
+            getline(cin >> ws, confirm);
+
+            if (confirm != "yes" && confirm != "no")
+            {
+                cout << "\n\t\t\t\t\t\t\t Wrong choice" << endl;
+                return;
+            }
+
+            if (confirm == "no")
+            {
+                cout << "\n\t\t\t\t\t\t\t Purchase canceled." << endl;
+                return;
+            }
+
+            ClearScreen();
+
+            g.Quantity -= amount;
+
+            double total = parsePrice(g.Price) * amount;
+
+            cout << "\nPurchase successful! " << g.Name << endl;
+            cout << "Total cost: " << fixed << setprecision(2) << total << "$" << endl;
+            cout << "Remaining quantity: " << g.Quantity << endl;
+
+            saveGamesToFile(Games);
+
+            ofstream fout("purchases.txt", ios::app);
+            if (!fout)
+            {
+                cout << " Error opening purchase.txt for append ! " << endl;
+                return;
+            }
+
+            fout << username << "|" << g.Name << "|" << amount << "|" << fixed << setprecision(2) << total << "\n";
+
+            fout.close();
+        }
+    }
+
+    if (!Found)
+    {
+        cout << "\n\t\t\tGame with Name (" << name << ") not found!\n\n";
+    }
+}
+
 int main()
 {
     vector<Game> Games;
