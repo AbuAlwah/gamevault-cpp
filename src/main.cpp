@@ -727,6 +727,52 @@ void ShowBuyingBill(const string &username)
     fin.close();
 }
 
+void ShowAllPurchases()
+{
+    ifstream fin("purchases.txt");
+
+    if (!fin)
+    {
+        cout << "\nNo purchase data found (purchases.txt missing).\n";
+        return;
+    }
+
+    cout << "\n\t\t=== All Sales (Purchases) ===\n\n";
+
+    cout << "------------------------------------------------------------\n";
+    cout << left << setw(15) << "Username" << setw(25) << "Game Name" << setw(10) << "Qty" << setw(10) << "Total ($)" << endl;
+    cout << "------------------------------------------------------------\n";
+
+    string line;
+    bool empty = true;
+
+    while (getline(fin, line))
+    {
+        if (line.empty())
+            continue;
+
+        stringstream ss(line);
+        string username, gameName;
+        int qtyStr;
+        double totalStr;
+
+        getline(ss, username, '|');
+        getline(ss, gameName, '|');
+        ss >> qtyStr;
+        ss.ignore(1, '|');
+        ss >> totalStr;
+
+        cout << left << setw(15) << username << setw(25) << gameName << setw(10) << qtyStr << setw(10) << totalStr << endl;
+
+        empty = false;
+    }
+
+    if (empty)
+        cout << "\nNo purchases recorded yet.\n";
+
+    fin.close();
+}
+
 int main()
 {
     vector<Game> Games;
