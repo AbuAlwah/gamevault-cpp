@@ -416,6 +416,39 @@ bool UndoAdd(vector<Game> &Games, Stack<Game> &addedStack)
     return false;
 }
 
+void EditGame(vector<Game> &Games)
+{
+    string EditName;
+    cout << "Enter game name to edit : ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin >> ws, EditName);
+
+    bool Found = false;
+    for (auto &g : Games)
+    {
+        if (g.Name == EditName)
+        {
+            Found = true;
+            cout << "\n\t\tThe game has been found .\n\n";
+
+            cout << "New name : ";
+            getline(cin, g.Name);
+
+            cout << "New price : ";
+            getline(cin, g.Price);
+
+            cout << "New quantity : ";
+            cin >> g.Quantity;
+
+            cout << "\n\n\t\t\t Game data has been successfully modified\n\n";
+
+            break;
+        }
+    }
+    if (!Found)
+        cout << "\n\t\t\tGame not found !\n\n";
+}
+
 int main()
 {
     vector<Game> Games;
