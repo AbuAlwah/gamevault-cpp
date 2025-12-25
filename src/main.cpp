@@ -675,6 +675,58 @@ void BuyGame(vector<Game> &Games, const string &username)
     }
 }
 
+void ShowBuyingBill(const string &username)
+{
+    ifstream fin("purchases.txt");
+    if (!fin)
+    {
+        cout << "\nNo purchase history found.\n";
+        return;
+    }
+
+    cout << "\n\t\tPurchase History for " << username << "\n\n\n";
+    cout << left << setw(25) << "Game Name" << setw(18) << "Quantity" << setw(12) << "Total($)" << endl;
+
+    cout << "------------------------------------------------------\n";
+
+    string line;
+    double totalSpent = 0.0;
+    bool found = false;
+
+    while (getline(fin, line))
+    {
+        string user, name;
+        int qty;
+        double total;
+
+        stringstream ss(line);
+        getline(ss, user, '|');
+        getline(ss, name, '|');
+        ss >> qty;
+        ss.ignore(1, '|');
+        ss >> total;
+
+        if (user == username)
+        {
+            found = true;
+            cout << left << setw(28) << name << setw(16) << qty << setw(12) << fixed << setprecision(2) << total << endl;
+            totalSpent += total;
+        }
+    }
+
+    if (!found)
+    {
+        cout << "No purchases yet.\n";
+    }
+    else
+    {
+        cout << string(54, '-') << endl;
+        cout << left << setw(15) << "\nTOTAL SPENT:" << fixed << setprecision(2) << totalSpent << "$\n";
+    }
+
+    fin.close();
+}
+
 int main()
 {
     vector<Game> Games;
