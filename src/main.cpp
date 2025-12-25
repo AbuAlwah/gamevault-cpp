@@ -550,6 +550,48 @@ bool UndoDeletion(vector<Game> &Games, Stack<Game> &deletedStack)
     return true;
 }
 
+void ShowReport(const vector<Game> &Games)
+{
+    cout << "\n\t\t\t\t\t\t Report of current inventory\n\n";
+
+    cout << endl
+         << left << setw(9) << "ID" << setw(22) << "Name" << setw(13) << "Price" << setw(12) << "Quantity" << endl;
+    cout << "------------------------------------------------------\n";
+
+    double totalValue = 0.0;
+    for (auto &g : Games)
+    {
+        cout << setw(6) << g.ID << setw(25) << g.Name << setw(16) << g.Price << setw(10) << g.Quantity << endl;
+        totalValue += parsePrice(g.Price) * g.Quantity;
+    }
+    cout << "------------------------------------------------------\n";
+
+    cout << "\nTotal inventory value: " << fixed << setprecision(2) << totalValue << "$\n";
+
+    ofstream fout("report.txt");
+    if (!fout)
+    {
+        cout << "Unable to open (report.txt) for writing.\n";
+        return;
+    }
+
+    fout << "Report of current inventory\n\n";
+
+    fout << "------------------------------------------------------\n";
+
+    fout << left << setw(9) << "ID" << setw(22) << "Name" << setw(13) << "Price" << setw(12) << "Quantity" << "\n";
+
+    for (auto &g : Games)
+    {
+        fout << setw(6) << g.ID << setw(25) << g.Name << setw(16) << g.Price << setw(10) << g.Quantity << "\n";
+    }
+    fout << "------------------------------------------------------\n";
+
+    fout << "\nTotal inventory value: " << totalValue << "$\n";
+    fout.close();
+    cout << "\nReport saved to report.txt\n";
+}
+
 int main()
 {
     vector<Game> Games;
