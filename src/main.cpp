@@ -822,6 +822,147 @@ void ExitProgram()
     exit(0);
 }
 
+void AdminMenu(vector<Game> &Games, Stack<Game> &addedStack, Stack<Game> &deletedStack)
+{
+    bool running = true;
+    while (running)
+    {
+        ShowScreen1();
+        int choice;
+        cout << "\tEnter Choice : ";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            ClearScreen();
+            ShowGames(Games);
+            break;
+
+        case 2:
+            ClearScreen();
+            AddGame(Games, addedStack);
+            break;
+
+        case 3:
+            ClearScreen();
+            UndoAdd(Games, addedStack);
+            break;
+
+        case 4:
+            ClearScreen();
+            EditGame(Games);
+            break;
+
+        case 5:
+            ClearScreen();
+            SearchGameByID(Games);
+            break;
+
+        case 6:
+            ClearScreen();
+            SearchGameName(Games);
+            break;
+
+        case 7:
+            ClearScreen();
+            DeleteGameByID(Games, deletedStack);
+            break;
+
+        case 8:
+            ClearScreen();
+            UndoDeletion(Games, deletedStack);
+            break;
+
+        case 9:
+            WhiteCycleTheme();
+            break;
+
+        case 10:
+            BlackCycleTheme();
+            break;
+
+        case 11:
+            ClearScreen();
+            ShowReport(Games);
+            break;
+
+        case 12:
+            ClearScreen();
+            ShowAllPurchases();
+            break;
+
+        case 100:
+            cout << "\n Logging out...\n";
+            running = false;
+            break;
+
+        case 0:
+            ExitProgram();
+
+        default:
+            cout << "Invalid choice.\n";
+        }
+        PauseScreen();
+        ClearScreen();
+    }
+}
+
+void UserMenu(vector<Game> &Games, const string &username)
+{
+    bool running = true;
+    while (running)
+    {
+        ShowScreen2();
+        cout << "\tEnter Choice : ";
+        int choice;
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            ClearScreen();
+            ShowGames(Games);
+            break;
+
+        case 2:
+            ClearScreen();
+            SearchGameName(Games);
+            break;
+
+        case 3:
+            ClearScreen();
+            BuyGame(Games, username);
+            break;
+
+        case 4:
+            WhiteCycleTheme();
+            break;
+
+        case 5:
+            BlackCycleTheme();
+            break;
+
+        case 6:
+            ClearScreen();
+            ShowBuyingBill(username);
+            break;
+
+        case 100:
+            cout << "\n Logging out...\n";
+            running = false;
+            break;
+
+        case 0:
+            ExitProgram();
+
+        default:
+            cout << "Invalid choice.\n";
+            break;
+        }
+        PauseScreen();
+        ClearScreen();
+    }
+}
+
 int main()
 {
     vector<Game> Games;
@@ -831,7 +972,20 @@ int main()
     Stack<Game> addedStack;
     Stack<Game> deletedStack;
 
-    ClearScreen();
+  while (true)
+    {
+        ClearScreen();
+        User current = login();
+
+        if (current.role == "none")
+            continue;
+
+        if (current.role == "admin")
+            AdminMenu(Games, addedStack, deletedStack);
+
+        else if (current.role == "user")
+            UserMenu(Games, current.username);
+    }
 
     return 0;
 }
