@@ -6,6 +6,9 @@
 #include <conio.h>
 #include <sstream>
 #include <iomanip>
+#include <cstdlib>
+#include <stdexcept>
+#include <vector>
 #include "User.h"
 #include "Game.h"
 
@@ -36,7 +39,7 @@ void ensureUsersFile()
 void PauseScreen()
 {
     cout << "\n Press Enter to continue...\n";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.ignore(std::numeric_limits<streamsize>::max(), '\n');
     cin.get();
 }
 
@@ -772,6 +775,51 @@ void ShowAllPurchases()
         cout << "\nNo purchases recorded yet.\n";
 
     fin.close();
+}
+
+void ShowScreen1()
+{
+    cout << "\n"
+         << string(10, '\t') << "Hello to Game Library System\n\n"
+         << string(11, '\t') << "[100] Logout\n";
+    cout << string(5, '\t') << "[1] Show Games \n";
+    cout << string(5, '\t') << "[2] Adding Game \n";
+    cout << string(5, '\t') << "[3] Undo Last Added Game \n";
+    cout << string(5, '\t') << "[4] Edit Game Data \n";
+    cout << string(5, '\t') << "[5] Search By ID \n";
+    cout << string(5, '\t') << "[6] Search By Name \n";
+    cout << string(5, '\t') << "[7] Delet Game \n";
+    cout << string(5, '\t') << "[8] Undo deletion \n";
+    cout << string(1, '\t') << "[9] White Screen Theme";
+    cout << string(5, '\t') << "[10] Black Screen Theme \n\n";
+    cout << string(5, '\t') << "[11] Show Report \n";
+    cout << string(5, '\t') << "[12] Show Sales \n\n";
+    cout << string(5, '\t') << "[0] Exit \n\n";
+}
+
+void ShowScreen2()
+{
+    cout << "\n"
+         << string(10, '\t') << "Hello to Game Library\n\n"
+         << string(10, '\t') << "   [100] Logout\n";
+    cout << string(5, '\t') << "[1] Show Games \n";
+    cout << string(5, '\t') << "[2] Find a Game \n";
+    cout << string(5, '\t') << "[3] Buy a Game \n";
+    cout << string(1, '\t') << "[4] White Screen Theme";
+    cout << string(5, '\t') << "[5] Black Screen Theme \n\n";
+    cout << string(5, '\t') << "[6] Show Buying Bill \n\n";
+    cout << string(5, '\t') << "[0] Exit \n\n";
+}
+
+void WhiteCycleTheme() { system("color F0"); }
+
+void BlackCycleTheme() { system("color 0F"); }
+
+void ExitProgram()
+{
+    cout << string(6, '\t') << "( Program exited )\n\n";
+    cout << "\t\t\t  " << string(63, '-') << "\n\n";
+    exit(0);
 }
 
 int main()
