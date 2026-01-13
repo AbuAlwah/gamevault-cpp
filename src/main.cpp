@@ -4,6 +4,7 @@
 #include <limits>
 #include <windows.h>
 #include <conio.h>
+#include <sstream>
 #include <iomanip>
 #include "User.h"
 #include "Game.h"
