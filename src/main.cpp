@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <vector>
+#include <sstream>
 #include "User.h"
 #include "Game.h"
 
